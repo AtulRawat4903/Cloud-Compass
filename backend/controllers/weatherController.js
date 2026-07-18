@@ -1,6 +1,6 @@
 import axios from "axios";
 import mongoose from "mongoose";
-import SearchHistory from "../models/SearchHistory.js";
+import SearchHistory from "../models/searchHistory.js";
 
 const BASE_URL = "https://api.openweathermap.org/data/2.5";
 const GEO_URL = "https://api.openweathermap.org/geo/1.0";
