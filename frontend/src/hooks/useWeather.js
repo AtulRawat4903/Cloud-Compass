@@ -3,6 +3,7 @@ import {
   fetchCurrentWeather,
   fetchForecast,
   fetchHistory,
+  clearHistory,
   extractErrorMessage,
 } from "../services/api";
 
@@ -45,6 +46,15 @@ export const useWeather = () => {
     [loadHistory]
   );
 
+  const clearSearchHistory = async () => {
+  try {
+    await clearHistory();
+    setHistory([]);
+  } catch (error) {
+    setError(extractErrorMessage(error));
+  }
+};
+
   return {
     current,
     forecast,
@@ -53,5 +63,6 @@ export const useWeather = () => {
     error,
     search,
     loadHistory,
+    clearSearchHistory,
   };
 };

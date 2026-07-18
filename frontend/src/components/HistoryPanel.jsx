@@ -1,7 +1,15 @@
-export default function HistoryPanel({ items, onSelect }) {
+export default function HistoryPanel({ items, onSelect, onClearHistory }) {
   return (
     <aside style={styles.wrap}>
-      <p style={styles.label}>SEARCH LOG</p>
+      <div style={styles.header}>
+        <p style={styles.label}>SEARCH LOG</p>
+
+        {items.length > 0 && (
+          <button style={styles.clearBtn} onClick={onClearHistory}>
+            Clear
+          </button>
+        )}
+      </div>
       {items.length === 0 ? (
         <p style={styles.empty}>No lookups logged yet.</p>
       ) : (
@@ -28,6 +36,22 @@ export default function HistoryPanel({ items, onSelect }) {
 }
 
 const styles = {
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+
+  clearBtn: {
+    background: "transparent",
+    border: "none",
+    color: "var(--accent)",
+    cursor: "pointer",
+    fontSize: 13,
+    fontWeight: 600,
+  },
+
   wrap: {
     background: "var(--panel)",
     border: "1px solid var(--line)",
@@ -35,6 +59,7 @@ const styles = {
     padding: 20,
     height: "fit-content",
   },
+
   label: {
     fontFamily: "var(--font-mono)",
     fontSize: 11,
@@ -42,11 +67,14 @@ const styles = {
     color: "var(--text-muted)",
     margin: "0 0 12px",
   },
+
   empty: {
     fontSize: 13,
     color: "var(--text-muted)",
   },
+
   list: { listStyle: "none", margin: 0, padding: 0 },
+
   row: {
     width: "100%",
     display: "flex",
@@ -60,6 +88,7 @@ const styles = {
     fontFamily: "var(--font-body)",
     fontSize: 14,
   },
+
   city: { textAlign: "left" },
   temp: { fontFamily: "var(--font-mono)", color: "var(--accent)" },
 };

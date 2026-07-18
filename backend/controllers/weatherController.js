@@ -9,7 +9,13 @@ const apiKey = () => process.env.OPENWEATHER_API_KEY;
 
 export const getCurrentWeather = async (req, res, next) => {
   try {
-    const { city, lat, lon, units = "metric" } = req.query;
+    const {
+      city,
+      lat,
+      lon,
+      units = "metric",
+      saveHistory = "true",
+    } = req.query;
 
     if (!city && !(lat && lon)) {
       return res.status(400).json({
@@ -47,7 +53,7 @@ export const getCurrentWeather = async (req, res, next) => {
       dt: data.dt,
     };
 
-    if (mongoose.connection.readyState === 1) {
+    if (mongoose.connection.readyState === 1 && saveHistory === "true") {
       SearchHistory.create({
         city: payload.city,
         country: payload.country,
@@ -145,6 +151,24 @@ export const getHistory = async (req, res, next) => {
       .sort({ searchedAt: -1 })
       .limit(10);
     res.json(history);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const clearHistory = async (req, res, next) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        message: "Database unavailable.",
+      });
+    }
+
+    await SearchHistory.deleteMany({});
+
+    res.json({
+      message: "Search history cleared successfully.",
+    });
   } catch (error) {
     next(error);
   }

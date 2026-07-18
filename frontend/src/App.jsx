@@ -7,14 +7,22 @@ import Loader from "./components/Loader";
 import { useWeather } from "./hooks/useWeather";
 
 export default function App() {
-  const { current, forecast, history, loading, error, search, loadHistory } =
-    useWeather();
+  const {
+    current,
+    forecast,
+    history,
+    loading,
+    error,
+    search,
+    clearSearchHistory,
+  } = useWeather();
 
   useEffect(() => {
-    loadHistory();
-    search({ city: "London" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    search({
+      city: "London",
+      saveHistory: false,
+    });
+  }, [search]);
 
   return (
     <div style={styles.page}>
@@ -45,7 +53,11 @@ export default function App() {
               </>
             )}
           </div>
-          <HistoryPanel items={history} onSelect={search} />
+          <HistoryPanel
+            items={history}
+            onSelect={search}
+            onClearHistory={clearSearchHistory}
+          />
         </main>
 
         <footer style={styles.footer}>

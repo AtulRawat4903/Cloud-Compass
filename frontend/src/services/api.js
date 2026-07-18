@@ -4,10 +4,16 @@ const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const client = axios.create({ baseURL: API_URL, timeout: 10000 });
 
-export const fetchCurrentWeather = async ({ city, lat, lon }) => {
+export const fetchCurrentWeather = async ({
+  city,
+  lat,
+  lon,
+  saveHistory = true,
+}) => {
   const { data } = await client.get("/weather/current", {
-    params: city ? { city } : { lat, lon },
+    params: city ? { city, saveHistory } : { lat, lon, saveHistory },
   });
+
   return data;
 };
 
@@ -27,6 +33,11 @@ export const searchCities = async (query) => {
 
 export const fetchHistory = async () => {
   const { data } = await client.get("/weather/history");
+  return data;
+};
+
+export const clearHistory = async () => {
+  const { data } = await client.delete("/weather/history");
   return data;
 };
 
