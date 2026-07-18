@@ -5,11 +5,8 @@ import rateLimit from "express-rate-limit";
 import connectDB from "./config/db.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
-import dns from "dns";
 
 dotenv.config();
-
-dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -41,10 +38,16 @@ app.use(errorHandler);
 
 
 const start = async () => {
-  await connectDB();
-  app.listen(PORT, () => {
-    console.log(`🚀 Weather API running on http://localhost:${PORT}`);
-  });
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server listening on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
 };
 
 start();
